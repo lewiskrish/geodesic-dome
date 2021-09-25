@@ -2,10 +2,7 @@ from flask import Flask, request, send_from_directory, jsonify
 import script
 import neighbours
 
-from whitenoise import WhiteNoise
-
 app = Flask(__name__)
-app.wsgi_app = WhiteNoise(app.wsgi_app, root="static/")
 
 @app.route("/")
 def hello_world():
