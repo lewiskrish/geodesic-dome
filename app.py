@@ -28,7 +28,7 @@ def search():
     vertex = data[1]
     distance = data[2]
     vertices, triangles, adj_list = neighbours.create_icosphere(int(factor))
-    neighbours_list = neighbours.find_neighbours(vertices, adj_list, int(vertex), int(distance))
+    neighbours_list = neighbours.find_neighbours(vertices, adj_list, int(vertex), int(distance)).tolist()
     true_neighbours = [item for item in neighbours_list if item >= 0]
     return jsonify(
         vertices=true_neighbours,
