@@ -314,7 +314,6 @@ def print_json(vertices: np.ndarray, triangles: np.ndarray) -> None:
 
 def main():
     vertices, triangles = create_icosphere(int(input()))
-    print_json(vertices, triangles)
 
 
 if __name__ == "__main__":

@@ -60,13 +60,15 @@ function createGeometry(data) {
     const vertices = [];
     const colors = [];
     const color = new THREE.Color("white");
+    const v = data.vertices.flat();
+    const f = data.indices.flat();
 
-    for (let i = 0; i < data.vertices.length; i += 3) {
-        vertices.push(data.vertices[i] * 50, data.vertices[i + 1] * 50, data.vertices[i + 2] * 50);
+    for (let i = 0; i < v.length; i += 3) {
+        vertices.push(v[i] * 50, v[i + 1] * 50, v[i + 2] * 50);
         colors.push(color.r, color.g, color.b);
     }
-    for (let i = 0; i < data.indices.length; i += 3) {
-        indices.push(data.indices[i], data.indices[i + 1], data.indices[i + 2]);
+    for (let i = 0; i < f.length; i += 3) {
+        indices.push(f[i], f[i + 1], f[i + 2]);
     }
 
     geometry.setIndex(indices);
@@ -152,7 +154,7 @@ gui
     .add(params, "factor", 0, 10, 1)
     .name("tesselation factor")
     .onFinishChange(function (value) {
-        fetch("https://geodesic-dome.herokuapp.com/face", {
+        fetch("https://geodesic-dome.herokuapp.com/tesselate", {
             method: 'POST',
             body: value,
             headers: {
