@@ -152,7 +152,7 @@ gui
     .add(params, "factor", 0, 10, 1)
     .name("tesselation factor")
     .onFinishChange(function (value) {
-        fetch("http://localhost:8000/face", {
+        fetch("https://geodesic-dome.herokuapp.com/face", {
             method: 'POST',
             body: value,
             headers: {
@@ -324,7 +324,7 @@ function onClick(event) {
             // alert(objects[0].faceIndex);
             // If mouse is on a vertex do neighbour search
         } else if (objects[0].object.type === "Points") {
-            fetch("http://localhost:8000/search", {
+            fetch("https://geodesic-dome.herokuapp.com/search", {
                 method: 'POST',
                 body: params.factor + "," + objects[0].index + "," + params.searchDistance,
                 headers: {
