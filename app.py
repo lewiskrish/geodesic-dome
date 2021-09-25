@@ -33,3 +33,6 @@ def search():
     return jsonify(
         vertices=true_neighbourslist,
     )
+
+if __name__ == "__main__":
+    app.run()
