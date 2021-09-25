@@ -103,7 +103,7 @@ function createLine(mesh) {
 // Creating a wireframe to use for showing edges
 var line = createLine(mesh);
 
-const sprite = new THREE.TextureLoader().load("disc.png");
+const sprite = new THREE.TextureLoader().load("./disc.png");
 
 // Creates a points object representing the vertices of the dome
 function createPoints(mesh) {
