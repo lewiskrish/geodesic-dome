@@ -162,7 +162,7 @@ const gui = new GUI();
 gui
   .add({
     tesselate: function () {
-      fetch("http://127.0.0.1:5000/tesselate", {
+      fetch("https://geodesic-dome.herokuapp.com/tesselate", {
         method: 'POST',
         body: 1,
         headers: {
@@ -381,7 +381,7 @@ function onClick(event) {
       if (!params.tessellateMode) {
         return;
       }
-      fetch("http://127.0.0.1:5000/faceselective", {
+      fetch("https://geodesic-dome.herokuapp.com/faceselective", {
         method: 'POST',
         body: JSON.stringify({ index: objects[0].faceIndex, vertices: cacheVertices, indices: cacheIndices }),
         headers: {
@@ -411,7 +411,7 @@ function onClick(event) {
       // If mouse is on a vertex do neighbour search
     } else if (objects[0].object.type === "Points") {
       if (params.tessellateMode) {
-        fetch("http://127.0.0.1:5000/vertexselective", {
+        fetch("https://geodesic-dome.herokuapp.com/vertexselective", {
           method: 'POST',
           body: JSON.stringify({ index: objects[0].index, distance: params.searchDistance }),
           headers: {
@@ -439,7 +439,7 @@ function onClick(event) {
           });
       }
       else if (params.searchMode) {
-        fetch("http://127.0.0.1:5000/search", {
+        fetch("https://geodesic-dome.herokuapp.com/search", {
           method: 'POST',
           body: JSON.stringify({ index: objects[0].index, distance: params.searchDistance }),
           headers: {
@@ -455,7 +455,7 @@ function onClick(event) {
           });
       }
       else if (params.retrieveMode) {
-        fetch("http://127.0.0.1:5000/retrieve", {
+        fetch("https://geodesic-dome.herokuapp.com/retrieve", {
           method: 'POST',
           body: JSON.stringify({ index: objects[0].index }),
           headers: {
@@ -469,7 +469,7 @@ function onClick(event) {
           });
       }
       else if (params.storeMode) {
-        fetch("http://127.0.0.1:5000/store", {
+        fetch("https://geodesic-dome.herokuapp.com/store", {
           method: 'POST',
           body: JSON.stringify({ index: objects[0].index, value: params.storeValue }),
           headers: {
