@@ -3,7 +3,7 @@ from flask_session import Session
 import secrets
 import numpy as np
 import sys
-sys.path.append("../src/geo_dome")
+sys.path.append("src/geo_dome")
 try:
     from geo_dome.geodesic_dome import GeodesicDome
     from geo_dome.neighbourhood_search import create_adj_list
