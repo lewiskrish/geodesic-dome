@@ -154,7 +154,7 @@ var params = {
   showPoints: false,
   domeColor: 0xffa64d,
   pointSize: 2,
-  searchDistance: 1,
+  searchDistance: 0,
 };
 
 // GUI logic
@@ -263,7 +263,7 @@ gui
   });
 gui
   .add(params, "searchDistance", 0, 100, 1)
-  .name("search distance");
+  .name("distance");
 gui
   .add({
     reset: function () {

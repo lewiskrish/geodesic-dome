@@ -28,6 +28,7 @@ def tesselate():
     if "vertices" and "indices" in session:
         dome.vertices = np.asarray(session["vertices"])
         dome.triangles = np.asarray(session["indices"])
+    dome.adj_list = create_adj_list(dome.get_vertices(), dome.get_triangles())
     for i in range(int(index)):
         dome.tessellate(1)
     v = dome.get_vertices().tolist()
@@ -47,6 +48,7 @@ def faceselective():
     if "vertices" and "indices" in session:
         dome.vertices = np.asarray(session["vertices"])
         dome.triangles = np.asarray(session["indices"])
+    dome.adj_list = create_adj_list(dome.get_vertices(), dome.get_triangles())
     target = np.array([index], dtype=np.int64)
     dome.partial_tessellate_triangle(target, 0)
     v = dome.get_vertices().tolist()
@@ -67,6 +69,7 @@ def vertexselective():
     if "vertices" and "indices" in session:
         dome.vertices = np.asarray(session["vertices"])
         dome.triangles = np.asarray(session["indices"])
+    dome.adj_list = create_adj_list(dome.get_vertices(), dome.get_triangles())
     dome.partial_tessellate_vertex(int(vertex), int(distance))
     v = dome.get_vertices().tolist()
     i = dome.get_triangles().tolist()
