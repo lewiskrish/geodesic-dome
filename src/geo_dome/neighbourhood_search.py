@@ -1,6 +1,8 @@
 import numpy as np
 from numba import njit
 
+MAX_POINTS = 12
+
 
 @njit
 def adj_insert(adj: np.ndarray, root: np.int64, neighbour: np.int64) -> None:
@@ -12,7 +14,7 @@ def adj_insert(adj: np.ndarray, root: np.int64, neighbour: np.int64) -> None:
         neighbour (np.int64): index of neighbour vertex to add
     """
     root_list = adj[root]
-    for i in range(6):
+    for i in range(MAX_POINTS):
         if root_list[i] == neighbour:
             break
         if root_list[i] == -1:
@@ -31,7 +33,7 @@ def create_adj_list(vertices: np.ndarray, triangles: np.ndarray) -> np.ndarray:
     Returns:
         np.ndarray: array of arrays representing adjacency list
     """
-    adj = np.full((len(vertices), 6), -1, dtype=np.int64)
+    adj = np.full((len(vertices), MAX_POINTS), -1, dtype=np.int64)
 
     for t in triangles:
         adj_insert(adj, t[0], t[1])
@@ -62,7 +64,7 @@ def find_neighbours_vertex(
     """
     size = 1
     for i in range(depth):
-        size += (i + 1) * 6
+        size += (i + 1) * MAX_POINTS
 
     if size > len(vertices):
         size = len(vertices)
@@ -78,7 +80,7 @@ def find_neighbours_vertex(
     q_end = 1
 
     while curr_depth <= depth:
-        temp = np.full(curr_depth * 6, -1, dtype=np.int64)
+        temp = np.full(len(queue) * MAX_POINTS, -1, dtype=np.int64)
         temp_ptr = 0
         q_front = 0
 
@@ -128,7 +130,7 @@ def find_neighbours_triangle(
     # make space for initial 3 vertices
     size = START_LEN
     for i in range(depth):
-        size += ((i + 1) * 6) + START_LEN
+        size += ((i + 1) * MAX_POINTS) + START_LEN
 
     if size > len(vertices):
         size = len(vertices)
@@ -149,7 +151,7 @@ def find_neighbours_triangle(
     q_end = START_LEN
 
     while curr_depth <= depth:
-        temp = np.full((curr_depth * 6) + START_LEN, -1, dtype=np.int64)
+        temp = np.full((len(queue) * MAX_POINTS) + START_LEN, -1, dtype=np.int64)
         temp_ptr = 0
         q_front = 0
 
