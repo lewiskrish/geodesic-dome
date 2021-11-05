@@ -83,7 +83,6 @@ def find_neighbours_vertex(
         temp = np.full(len(queue) * MAX_POINTS, -1, dtype=np.int64)
         temp_ptr = 0
         q_front = 0
-
         while q_front < q_end:
             v_index = queue[q_front]
 
@@ -98,12 +97,15 @@ def find_neighbours_vertex(
             visited[v_index] = True
             q_front += 1
 
-        queue = temp
+        # resize queue to contain all new neighbours, remove -1
+        new_queue = np.zeros(temp_ptr, dtype=np.int64)
+        for i in range(temp_ptr):
+            new_queue[i] = temp[i]
+        queue = new_queue
         q_end = temp_ptr
         curr_depth += 1
         if temp_ptr == 0:
             break
-
     return neighbours
 
 
@@ -168,8 +170,10 @@ def find_neighbours_triangle(
                     visited[neighbour] = True
             visited[v_index] = True
             q_front += 1
-
-        queue = temp
+        new_queue = np.zeros(temp_ptr, dtype=np.int64)
+        for i in range(temp_ptr):
+            new_queue[i] = temp[i]
+        queue = new_queue
         q_end = temp_ptr
         curr_depth += 1
         if temp_ptr == 0:
