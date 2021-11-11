@@ -144,10 +144,7 @@ var points = createPoints(mesh);
 
 // Setting up GUI parameters
 var params = {
-  tessellateMode: false,
-  searchMode: false,
-  retrieveMode: false,
-  storeMode: false,
+  mode: "view",
   storeValue: "value",
   showEdges: false,
   showFaces: true,
@@ -189,45 +186,7 @@ gui
   }, "tesselate")
   .name("tesselate all");
 gui
-  .add(params, "tessellateMode")
-  .name("tessellate mode")
-  .onChange(function (value) {
-    if (value) {
-      params.searchMode = false;
-      params.retrieveMode = false;
-      params.storeMode = false;
-    }
-  });
-gui
-  .add(params, "searchMode")
-  .name("search mode")
-  .onChange(function (value) {
-    if (value) {
-      params.tessellateMode = false;
-      params.retrieveMode = false;
-      params.storeMode = false;
-    }
-  });
-gui
-  .add(params, "retrieveMode")
-  .name("retrieve mode")
-  .onChange(function (value) {
-    if (value) {
-      params.tessellateMode = false;
-      params.searchMode = false;
-      params.storeMode = false;
-    }
-  });
-gui
-  .add(params, "storeMode")
-  .name("store mode")
-  .onChange(function (value) {
-    if (value) {
-      params.tessellateMode = false;
-      params.searchMode = false;
-      params.retrieveMode = false;
-    }
-  });
+  .add(params, "mode", ["view", "tessellate", "search", "store", "retrieve"]);
 gui
   .add(params, "storeValue")
   .name("value to store");
@@ -276,6 +235,31 @@ gui
     }
   }, "reset")
   .name("reset points");
+gui
+  .add({
+    resetDome: function () {
+      fetch("https://geodesic-dome.herokuapp.com/reset", {
+        method: 'GET',
+      })
+        .then(reponse => reponse.json())
+        .then(data => {
+          mesh.geometry.dispose();
+          line.geometry.dispose();
+          points.geometry.dispose();
+          scene.remove(mesh);
+          scene.remove(line);
+          scene.remove(points);
+          mesh = createMesh(data);
+          line = createLine(mesh);
+          points = createPoints(mesh);
+          scene.add(mesh);
+          points.material.size = params.pointSize;
+          params.showEdges && scene.add(line)
+          params.showPoints && scene.add(points)
+        });
+    }
+  }, "resetDome")
+  .name("reset dome");
 
 // Animation function
 const animate = function () {
@@ -378,7 +362,7 @@ function onClick(event) {
   if (objects.length > 0) {
     // If mouse is on a face
     if (objects[0].object.type === "Mesh") {
-      if (!params.tessellateMode) {
+      if (params.mode !== "tessellate") {
         return;
       }
       fetch("https://geodesic-dome.herokuapp.com/faceselective", {
@@ -410,7 +394,7 @@ function onClick(event) {
       // alert(objects[0].faceIndex);
       // If mouse is on a vertex do neighbour search
     } else if (objects[0].object.type === "Points") {
-      if (params.tessellateMode) {
+      if (params.mode === "tessellate") {
         fetch("https://geodesic-dome.herokuapp.com/vertexselective", {
           method: 'POST',
           body: JSON.stringify({ index: objects[0].index, distance: params.searchDistance }),
@@ -438,7 +422,7 @@ function onClick(event) {
             params.showPoints && scene.add(points)
           });
       }
-      else if (params.searchMode) {
+      else if (params.mode === "search") {
         fetch("https://geodesic-dome.herokuapp.com/search", {
           method: 'POST',
           body: JSON.stringify({ index: objects[0].index, distance: params.searchDistance }),
@@ -454,7 +438,7 @@ function onClick(event) {
             }
           });
       }
-      else if (params.retrieveMode) {
+      else if (params.mode === "retrieve") {
         fetch("https://geodesic-dome.herokuapp.com/retrieve", {
           method: 'POST',
           body: JSON.stringify({ index: objects[0].index }),
@@ -468,7 +452,7 @@ function onClick(event) {
             alert(data.value);
           });
       }
-      else if (params.storeMode) {
+      else if (params.mode === "store") {
         fetch("https://geodesic-dome.herokuapp.com/store", {
           method: 'POST',
           body: JSON.stringify({ index: objects[0].index, value: params.storeValue }),

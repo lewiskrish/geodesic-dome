@@ -3,6 +3,7 @@ from flask_session import Session
 import secrets
 import numpy as np
 import sys
+
 sys.path.append("src/geo_dome")
 try:
     from geo_dome.geodesic_dome import GeodesicDome
@@ -16,10 +17,23 @@ app.secret_key = secrets.token_bytes(32)
 app.config["SESSION_TYPE"] = "filesystem"
 Session(app)
 
+
 @app.route("/")
 def hello_world():
     session.clear()
-    return send_from_directory('static', "index.html")
+    return send_from_directory("static", "index.html")
+
+@app.route("/reset")
+def reset():
+    dome = GeodesicDome(0)
+    v = dome.get_vertices().tolist()
+    i = dome.get_triangles().tolist()
+    session["vertices"] = v
+    session["indices"] = i
+    return jsonify(
+        vertices=v,
+        indices=i,
+    )
 
 @app.route("/tesselate", methods=["POST"])
 def tesselate():
@@ -39,6 +53,7 @@ def tesselate():
         vertices=v,
         indices=i,
     )
+
 
 @app.route("/faceselective", methods=["POST"])
 def faceselective():
@@ -60,6 +75,7 @@ def faceselective():
         indices=i,
     )
 
+
 @app.route("/vertexselective", methods=["POST"])
 def vertexselective():
     data = request.get_json()
@@ -80,6 +96,7 @@ def vertexselective():
         indices=i,
     )
 
+
 @app.route("/search", methods=["POST"])
 def search():
     data = request.get_json()
@@ -96,6 +113,7 @@ def search():
         vertices=true_neighbours,
     )
 
+
 @app.route("/store", methods=["POST"])
 def store():
     data = request.get_json()
@@ -107,9 +125,8 @@ def store():
         s = {}
     s[str(vertex)] = value
     session["storage"] = s
-    return jsonify(
-        success="Success"
-    )
+    return jsonify(success="Success")
+
 
 @app.route("/retrieve", methods=["POST"])
 def retrieve():
@@ -118,16 +135,11 @@ def retrieve():
     if "storage" in session:
         s = session["storage"]
     else:
-        return jsonify(
-            value=None
-        )
+        return jsonify(value=None)
     if str(vertex) not in s:
-        return jsonify(
-            value=None
-        )
-    return jsonify(
-        value=s[str(vertex)]
-    )
+        return jsonify(value=None)
+    return jsonify(value=s[str(vertex)])
+
 
 if __name__ == "__main__":
     app.run()
