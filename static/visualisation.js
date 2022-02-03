@@ -1,7 +1,7 @@
 // Importing from CDN - can change to npm or local copy
 import * as THREE from "https://cdn.skypack.dev/three";
 import { TrackballControls } from "https://cdn.skypack.dev/three/examples/jsm/controls/TrackballControls";
-import { GUI } from "https://cdn.skypack.dev/three/examples/jsm/libs/dat.gui.module";
+import { GUI } from "https://cdn.skypack.dev/three/examples/jsm/libs/lil-gui.module.min";
 import data from "./icojson.js";
 
 // Setting up the scene and camera
